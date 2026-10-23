@@ -49,4 +49,12 @@ class OrderService {
 
         return $order;
     }
+
+    public function getOrder(Order $order) {
+        return $order;
+    }
+
+    public function getAllOrders() {
+        return Order::all();
+    }
 }

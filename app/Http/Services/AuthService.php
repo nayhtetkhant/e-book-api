@@ -6,13 +6,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService {
-    public function __construct(
-        private UserService $userService,
-    )
-    {
-        
-    }
-
     public function Login(array $data) {
         $user = User::where('email', $data['email'])->first();
         if ($user) {
