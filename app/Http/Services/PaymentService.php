@@ -7,7 +7,7 @@ use App\Models\payment;
 class PaymentService {
 
 
-    public function cratePayment(array $data) { 
+    public function createPayment(array $data) { 
         return payment::create($data);
     }
 }
