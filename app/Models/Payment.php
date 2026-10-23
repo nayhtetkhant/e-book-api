@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['user_id', 'product_id', 'status', 'paid_at'])]
+#[Fillable(['user_id', 'order_id', 'status', 'paid_at'])]
 class payment extends Model
 {
     /** @use HasFactory<\Database\Factories\PaymentFactory> */
@@ -19,7 +19,7 @@ class payment extends Model
     {
         return [
             'status' => PaymentStatus::class,
-            'paid_at' => 'datetime',
+            // 'paid_at' => 'datetime',
         ];
     }
 
@@ -27,7 +27,7 @@ class payment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function product(): BelongsTo {
-        return $this->belongsTo(Product::class);
+    public function order(): BelongsTo {
+        return $this->belongsTo(Order::class);
     }
 }
