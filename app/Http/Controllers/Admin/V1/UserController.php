@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Admin\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\v1\UserStoreRequest;
+use App\Http\Requests\Admin\V1\UserStoreRequest;
+use App\Http\Resources\Admin\V1\UserResource;
 use App\Http\Services\UserService;
 use Illuminate\Http\Request;
-
-use function App\Helpers\successResponse;
 
 class UserController extends Controller
 {
 
     public function __construct(
-        private UserService $userService,
+        public UserService $userService,   
     )
     {
         
@@ -23,7 +22,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        
+        //
     }
 
     /**
@@ -31,8 +30,10 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-
-        return successResponse($this->userService->createUser($request->validated()));
+        return response()->json(
+            UserResource::make($this->userService->createUser($request->validated())),
+            201
+        );
     }
 
     /**
@@ -40,7 +41,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        
+        //
     }
 
     /**
@@ -48,7 +49,7 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
+        //
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\v1;
+namespace App\Http\Requests\Admin\V1;
 
 use App\Enums\UserRole;
 use Illuminate\Contracts\Validation\ValidationRule;
