@@ -29,15 +29,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductStoreRequest $request)
+    public function store()
     {
-        $data = [
-            ...$request->validated(),
-            'file_path' => $request->filePath,
-        ];
-        return response()->json(
-            ProductResource::make($this->productService->createProduct($data)),
-        );
+
     }
 
     /**
