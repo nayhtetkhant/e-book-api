@@ -3,10 +3,14 @@
 namespace App\Http\Services;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class ProductService {
     public function createProduct(array $data) {
-        return Product::create($data);
+        if (Auth::user()->role === 'admin') {
+            return Product::create($data);
+        }
+        throw new \Exception('You are not authorized to access this resource');
     }
 
     public function getAllProducts() {
@@ -18,7 +22,10 @@ class ProductService {
     }
 
     public function updateProduct(Product $product, array $data) {
-        $product->update($data);
-        return $product;
+        if (Auth::user()->role === 'admin') {
+            $product->update($data);
+            return $product;
+        }
+        throw new \Exception('You are not authorized to access this resource');
     }
 }
