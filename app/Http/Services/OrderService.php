@@ -57,11 +57,12 @@ class OrderService {
     }
 
     public function getOrder(Order $order) {
+        $order->load('products');
         return $order;
     }
 
     public function getAllOrders() {
-        return Order::all();
+        return Order::with('products')->get();
     }
 
     public function updateOrder(Order $order, array $data) {

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\User\V1\OrderResource;
+use App\Http\Resources\Admin\V1\OrderResource;
 use App\Http\Services\OrderService;
 use App\Models\Order;
 use Illuminate\Http\Request;
