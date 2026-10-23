@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\V1\OrderStoreRequest;
+use App\Http\Requests\User\V1\OrderUpdateRequest;
 use App\Http\Resources\User\V1\OrderResource;
 use App\Http\Services\OrderService;
 use App\Models\Order;
@@ -23,7 +24,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(
+            OrderResource::collection($this->orderService->getAllOrders())
+        );
     }
 
     /**
@@ -31,26 +34,29 @@ class OrderController extends Controller
      */
     public function store(OrderStoreRequest $request)
     {
-        $data = $request->safe()->except('products');
         return response()->json(
-            OrderResource::make($this->orderService->createOrder($data, $request->validated('products'))),
+            OrderResource::make($this->orderService->createOrder($request->validated('products'))),
         );
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Order $order)
     {
-        //
-    }
+        return response()->json(
+            OrderResource::make($this->orderService->getOrder($order))
+        );
+    }   
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(OrderUpdateRequest $request, Order $order)
     {
-        //
+        return response()->json(
+            OrderResource::make($this->orderService->updateOrder($order, $request->validated())),
+        );
     }
 
     /**

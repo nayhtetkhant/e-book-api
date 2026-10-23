@@ -12,7 +12,7 @@ class OrderService {
         private PaymentService $paymentService,
     ) {}
 
-    public function createOrder(array $data, array $products) {
+    private function calculateTotalAmountAndPivotData(array $products) {
         $totalAmount = 0;
         $pivotData = [];
 
@@ -33,9 +33,15 @@ class OrderService {
                 'amount'   => $amount,
             ];
         }
+        return [$totalAmount, $pivotData];
+
+    }
+
+    public function createOrder(array $products) {
+        
+        [$totalAmount, $pivotData] = $this->calculateTotalAmountAndPivotData($products);
 
         $order = Order::create([
-            ...$data,
             'user_id'      => Auth::id(),
             'total_amount' => $totalAmount,
         ]);
@@ -56,5 +62,17 @@ class OrderService {
 
     public function getAllOrders() {
         return Order::all();
+    }
+
+    public function updateOrder(Order $order, array $data) {
+        [$totalAmount, $pivotData] = $this->calculateTotalAmountAndPivotData($data['products']);
+
+        $order->update([
+            'total_amount' => $totalAmount,
+        ]);
+
+        $order->products()->sync($pivotData);
+
+        return $order;
     }
 }
