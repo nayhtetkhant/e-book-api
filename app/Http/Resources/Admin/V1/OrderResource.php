@@ -19,6 +19,9 @@ class OrderResource extends JsonResource
             'userId' => $this->resource->user_id,
             'totalAmount' => $this->resource->total_amount,
             'status' => $this->resource->status,
+            'user' => $this->whenLoaded('user', function ($user) {
+                return UserResource::make($user);
+            }),
             'products' => $this->whenLoaded('products', function ($products) {
                 return ProductResource::collection($products);
             }),

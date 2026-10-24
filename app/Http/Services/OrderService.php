@@ -57,12 +57,20 @@ class OrderService {
     }
 
     public function getOrder(Order $order) {
-        $order->load('products');
-        return $order;
+        if(Auth::user()->role === 'admin') {
+            $order->load('products');
+            return $order;
+        }
+
+        return $order->where('user_id', Auth::id())->first();
     }
 
     public function getAllOrders() {
-        return Order::with('products')->get();
+        if(Auth::user()->role === 'admin') {
+            return Order::with(['products' , 'user'])->get();
+        }
+
+        return Order::where('user_id', Auth::id())->with('products')->get();
     }
 
     public function updateOrder(Order $order, array $data) {
