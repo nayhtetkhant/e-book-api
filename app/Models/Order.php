@@ -18,7 +18,10 @@ class Order extends Model
         ];
     }
 
-    public function products(): BelongsToMany {
-        return $this->belongsToMany(Product::class);
+    public function products(): BelongsToMany 
+    {
+        return $this->belongsToMany(Product::class, 'order_items')
+                    ->withPivot(['quantity', 'amount'])
+                    ->withTimestamps();
     }
 }

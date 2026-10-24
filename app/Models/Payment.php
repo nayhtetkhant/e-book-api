@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable(['order_id', 'status'])]
-class payment extends Model
+class Payment extends Model
 {
     /** @use HasFactory<\Database\Factories\PaymentFactory> */
     use HasFactory;

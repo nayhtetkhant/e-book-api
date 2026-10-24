@@ -2,12 +2,12 @@
 
 namespace App\Http\Services;
 
-use App\Models\payment;
+use App\Models\Payment;
 
 class PaymentService {
 
 
     public function createPayment(array $data) { 
-        return payment::create($data);
+        return Payment::create($data);
     }
 }
