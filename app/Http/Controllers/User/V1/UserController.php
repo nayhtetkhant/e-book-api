@@ -32,7 +32,7 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         return response()->json(
-            UserResource::make($this->userService->createUser($request->validated())),
+            $this->userService->createUser($request->validated())
         );
     }
 

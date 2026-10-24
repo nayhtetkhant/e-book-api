@@ -8,10 +8,25 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
+    public function __construct(
+        public AuthService $authService
+    )
+    {
+    }
+
     public function createUser(array $data) {
-        $data['password'] = Hash::make($data['password']);
+        $plainPassword = $data['password'];
+
+        $data['password'] = Hash::make($plainPassword);
         $user = User::create($data);
-        return $user;
+        
+        if($user) {
+            [$token, $user] = $this->authService->login([
+                'email' => $data['email'],
+                'password' => $plainPassword,
+            ]);
+            return [$token, $user];
+        }
     }
 
     public function updateUser(User $user, array $data) {
