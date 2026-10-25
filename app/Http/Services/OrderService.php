@@ -3,9 +3,11 @@
 namespace App\Http\Services;
 
 use App\Enums\PaymentStatus;
+use App\Enums\UserRole;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class OrderService {
     public function __construct(
@@ -57,7 +59,7 @@ class OrderService {
     }
 
     public function getOrder(Order $order) {
-        if(Auth::user()->role === 'admin') {
+        if(Auth::user()->role === UserRole::ADMIN) {
             $order->load('products');
             return $order;
         }
@@ -66,7 +68,7 @@ class OrderService {
     }
 
     public function getAllOrders() {
-        if(Auth::user()->role === 'admin') {
+        if(Auth::user()->role === UserRole::ADMIN) {
             return Order::with(['products' , 'user'])->get();
         }
 
