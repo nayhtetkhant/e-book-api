@@ -2,12 +2,13 @@
 
 namespace App\Http\Services;
 
+use App\Enums\UserRole;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class ProductService {
     public function createProduct(array $data) {
-        if (Auth::user()->role === 'admin') {
+        if (Auth::user()->role === UserRole::ADMIN) {
             return Product::create($data);
         }
         throw new \Exception('You are not authorized to access this resource');
@@ -22,7 +23,7 @@ class ProductService {
     }
 
     public function updateProduct(Product $product, array $data) {
-        if (Auth::user()->role === 'admin') {
+        if (Auth::user()->role === UserRole::ADMIN) {
             $product->update($data);
             return $product;
         }
