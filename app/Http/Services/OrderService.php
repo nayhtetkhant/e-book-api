@@ -50,12 +50,17 @@ class OrderService {
 
         $order->products()->attach($pivotData);
 
-        $this->paymentService->createPayment([
+        $checkoutUrl =  $this->paymentService->createPayment(
+            $totalAmount,
+            [
             'order_id' => $order->id,
             'status'   => PaymentStatus::PENDING,
         ]);
 
-        return $order;
+        return [
+            'order' => $order,
+            'checkoutUrl' => $checkoutUrl,
+        ];
     }
 
     public function getOrder(Order $order) {

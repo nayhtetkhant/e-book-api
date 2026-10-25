@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 
 #[Fillable(['name', 'email', 'password', 'role'])]
@@ -20,7 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasApiTokens , Notifiable;
+    use HasFactory, HasApiTokens , Notifiable , Billable;
 
     /**
      * Get the attributes that should be cast.
@@ -37,6 +38,6 @@ class User extends Authenticatable
     }
 
     public function products(): BelongsToMany {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class , 'product_users');
     }
 }

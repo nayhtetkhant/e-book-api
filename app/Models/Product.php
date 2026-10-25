@@ -14,6 +14,6 @@ class Product extends Model
     use HasFactory;
 
     public function users(): BelongsToMany {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class , 'product_users');
     }
 }
