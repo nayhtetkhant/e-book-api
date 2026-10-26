@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\V1\AuthController;
 use App\Http\Controllers\Admin\V1\OrderController;
+use App\Http\Controllers\Admin\V1\PaymentController;
 use App\Http\Controllers\Admin\V1\UserController;
 use App\Http\Controllers\Admin\V1\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -15,4 +16,5 @@ Route::middleware('auth:sanctum')->prefix('admin/v1')->group(function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('orders', OrderController::class);
+    Route::apiResource('payments' , PaymentController::class);
 });

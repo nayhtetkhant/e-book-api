@@ -3,8 +3,10 @@
 namespace App\Http\Services;
 
 use App\Enums\PaymentStatus;
+use App\Enums\UserRole;
 use App\Models\Payment;
 use App\Models\User;
+use ErrorException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -51,6 +53,14 @@ class PaymentService {
                 $user->products()->syncWithoutDetaching($productIds);
             }
         });
+    }
+
+    public function getAllPayments() {
+        if(Auth::user()->role == UserRole::ADMIN) {
+            return Payment::with('order')->get();
+        }
+
+        throw new ErrorException('User is not admin');
     }
 }
  
