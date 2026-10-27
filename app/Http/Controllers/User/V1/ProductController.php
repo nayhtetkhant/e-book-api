@@ -12,14 +12,10 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-
     public function __construct(
         public ProductService $productService,
-    )
-    {
-        
-    }
-    
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -35,7 +31,7 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-        // 
+        //
     }
 
     /**
@@ -55,8 +51,9 @@ class ProductController extends Controller
     {
         $data = [
             ...$request->validated(),
-            'file_path' => $request->validated('filePath')
+            'file_path' => $request->validated('filePath'),
         ];
+
         return response()->json(
             ProductResource::make($this->productService->updateProduct($product, $data))
         );
@@ -70,14 +67,20 @@ class ProductController extends Controller
         //
     }
 
-    public function getOrderedProducts() {
+    public function getOrderedProducts()
+    {
         return response()->json(
             ProductResource::collection($this->productService->getOrderProducts())
         );
     }
 
-    public function download(Product $product) {
+    public function download(Request $request, Product $product)
+    {
+        abort_unless($request->user()->products()->whereKey($product->id)->exists(), 403);
+        abort_unless($product->file_path, 404, 'No file attached to this product.');
+
         $downloadData = $this->productService->createDownloadUrl($product);
+
         return response()->json($downloadData);
     }
 }
