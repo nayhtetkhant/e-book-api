@@ -75,4 +75,9 @@ class ProductController extends Controller
             ProductResource::collection($this->productService->getOrderProducts())
         );
     }
+
+    public function download(Product $product) {
+        $downloadData = $this->productService->createDownloadUrl($product);
+        return response()->json($downloadData);
+    }
 }

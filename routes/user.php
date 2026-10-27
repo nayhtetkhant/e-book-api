@@ -16,4 +16,5 @@ Route::middleware('auth:sanctum')->prefix('user/v1')->group(function () {
     Route::apiResource('orders', OrderController::class);
     
     Route::get('/ordered' , [ProductController::class, 'getOrderedProducts']);
+    Route::get('/products/{product}/download', [ProductController::class, 'download']);
 });

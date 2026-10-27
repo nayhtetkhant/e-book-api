@@ -62,7 +62,22 @@ class ProductService {
         ];
     }
 
-    public function createDownloadUrl(){
-        
+    public function createDownloadUrl(Product $product) {
+        if (!$product->file_path) {
+            throw new \Exception('No file attached to this product.');
+        }
+
+        $url = Storage::disk('s3')->temporaryUrl(
+            $product->file_path, 
+            now()->addMinutes(10),
+            [
+                'ResponseContentDisposition' => 'attachment; filename="' . basename($product->file_path) . '"'
+            ]
+        );
+
+        return [
+            'download_url' => $url
+        ];
+
     }
 }
