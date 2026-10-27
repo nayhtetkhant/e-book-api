@@ -2,24 +2,31 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
-        User::factory()->count(10)->create();
+        if (! app()->environment('local', 'testing')) {
+            return;
+        }
+
+        foreach ([
+            ['Admin', 'admin@example.com', UserRole::ADMIN],
+            ['Demo Reader', 'reader@example.com', UserRole::USER],
+            ['Pending Reader', 'pending.reader@example.com', UserRole::USER],
+            ['Failed Reader', 'failed.reader@example.com', UserRole::USER],
+        ] as [$name, $email, $role]) {
+            User::firstOrCreate(['email' => $email], [
+                'name' => $name,
+                'password' => Hash::make('password'),
+                'role' => $role,
+                'email_verified_at' => now(),
+            ]);
+        }
     }
 }

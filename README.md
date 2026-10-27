@@ -170,14 +170,27 @@ php artisan db:seed
 php artisan serve --port=8000
 ```
 
-Local seeding creates sample products, users, and this administrator account:
+Seeding creates 10 curated e-books, an administrator, three demo readers, and completed, pending, and failed orders with matching payments. Only the completed order grants purchased-product access. Prices use the application’s existing whole-dollar convention.
+
+Demo accounts (all use the password `password`):
+
+| Email | Purpose |
+| --- | --- |
+| `admin@example.com` | Administrator dashboard |
+| `reader@example.com` | Customer with two purchased books |
+| `pending.reader@example.com` | Customer with a pending order |
+| `failed.reader@example.com` | Customer with a failed order |
+
+Administrator login:
 
 ```text
 Email: admin@example.com
 Password: password
 ```
 
-Use these credentials only for local development. The default seeder runs its sample seeders only when `APP_ENV=local`.
+Use these credentials only for local development. All demo seeders run only when `APP_ENV=local` or `APP_ENV=testing`. You can rerun `php artisan db:seed`: existing accounts, catalog entries, orders, payments, and purchase associations are preserved, including changed passwords and uploaded file paths. Each demo reader receives a sample order only if they have no orders yet.
+
+Seeding runs in a database transaction and does not call Stripe or S3. Payment session IDs and product file paths remain null; upload real assets before testing downloads. Seeding does not reset or delete existing data.
 
 ### Stripe Configuration
 
