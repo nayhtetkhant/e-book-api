@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers\Admin\V1;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\V1\ProductStoreRequest;
 use App\Http\Requests\Admin\V1\ProductUpdateRequest;
-use App\Http\Requests\User\V1\UserStoreRequest;
 use App\Http\Resources\Admin\V1\ProductResource;
 use App\Http\Services\ProductService;
 use App\Models\Product;
-use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-
     public function __construct(
         public ProductService $productService,
-    )
-    {
-        
-    }
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -34,17 +31,18 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductStoreRequest $request) {
+    public function store(ProductStoreRequest $request)
+    {
         $product = $this->productService->createProduct($request->validated());
-        
+
         $uploadUrl = null;
         if ($request->has('fileType')) {
             $uploadUrl = $this->productService->createUploadUrl($request->input('fileType'), $product);
         }
 
         return response()->json([
-            "product" => ProductResource::make($product),
-            "uploadUrl" => $uploadUrl
+            'product' => ProductResource::make($product),
+            'uploadUrl' => $uploadUrl,
         ]);
     }
 
@@ -65,8 +63,9 @@ class ProductController extends Controller
     {
         $data = [
             ...$request->validated(),
-            'file_path' => $request->validated('filePath')
+            'file_path' => $request->validated('filePath'),
         ];
+
         return response()->json(
             ProductResource::make($this->productService->updateProduct($product, $data))
         );
@@ -78,5 +77,13 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function download(Request $request, Product $product): JsonResponse
+    {
+        abort_unless($request->user()->role === UserRole::ADMIN, 403);
+        abort_unless($product->file_path, 404, 'No file attached to this product.');
+
+        return response()->json($this->productService->createDownloadUrl($product));
     }
 }

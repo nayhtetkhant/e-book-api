@@ -15,6 +15,7 @@ Route::middleware('auth:sanctum')->prefix('admin/v1')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('products', ProductController::class);
+    Route::get('products/{product}/download', [ProductController::class, 'download']);
     Route::apiResource('orders', OrderController::class);
     Route::apiResource('payments', PaymentController::class);
 });
