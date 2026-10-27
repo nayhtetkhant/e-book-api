@@ -11,10 +11,11 @@ Route::prefix('user/v1')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->prefix('user/v1')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('orders', OrderController::class);
-    
-    Route::get('/ordered' , [ProductController::class, 'getOrderedProducts']);
+
+    Route::get('/ordered', [ProductController::class, 'getOrderedProducts']);
     Route::get('/products/{product}/download', [ProductController::class, 'download']);
 });
