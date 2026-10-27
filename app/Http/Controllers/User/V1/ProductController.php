@@ -69,4 +69,10 @@ class ProductController extends Controller
     {
         //
     }
+
+    public function getOrderedProducts() {
+        return response()->json(
+            ProductResource::collection($this->productService->getOrderProducts())
+        );
+    }
 }

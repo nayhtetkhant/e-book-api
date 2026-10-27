@@ -6,6 +6,7 @@ use App\Enums\PaymentStatus;
 use App\Enums\UserRole;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -90,5 +91,9 @@ class OrderService {
         $order->products()->sync($pivotData);
 
         return $order;
+    }
+
+    public function getOrderProducts() {
+        return User::find(Auth::user()->id)->products;
     }
 }

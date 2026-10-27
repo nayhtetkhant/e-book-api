@@ -14,4 +14,6 @@ Route::middleware('auth:sanctum')->prefix('user/v1')->group(function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('orders', OrderController::class);
+    
+    Route::get('/ordered' , [ProductController::class, 'getOrderedProducts']);
 });

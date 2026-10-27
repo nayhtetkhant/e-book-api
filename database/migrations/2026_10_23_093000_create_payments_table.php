@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained();
             $table->string('status')->default(PaymentStatus::PENDING->value);
+            $table->string('stripe_session_id')->nullable();
             // $table->timestamp('paid_at');
             $table->timestamps();
         });

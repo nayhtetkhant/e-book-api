@@ -39,6 +39,6 @@ class StripeWebhookListener
             return;
         }
 
-        $this->paymentService->makeAsPaid($session['metadata']['payment_id']);
+        $this->paymentService->makeAsPaid($session['metadata']['payment_id'] , $session['id']);
     }
 }

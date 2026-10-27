@@ -27,13 +27,17 @@ class PaymentService {
             ],
         ]);
 
+        $payment->update([
+            'stripe_session_id' => $checkout->id
+        ]);
+
         return $checkout->url;
     }
 
-    public function makeAsPaid(int $paymentId) {
+    public function makeAsPaid(int $paymentId , string $sessionId) {
         $payment = Payment::with('order.products')->find($paymentId);
         
-        if (!$payment || !$payment->order) {
+        if (!$payment || !$payment->order || $payment->stripe_session_id != $sessionId) {
             return;
         }
 
