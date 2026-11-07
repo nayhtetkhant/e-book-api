@@ -34,8 +34,12 @@ class OrderController extends Controller
      */
     public function store(OrderStoreRequest $request)
     {
-        $result = $this->orderService->createOrder($request->validated('products'));
-
+        $origin = $request->getSchemeAndHttpHost();
+    
+        $result = $this->orderService->createOrder(
+            $request->validated('products')
+        );
+    
         return response()->json([
             'order' => OrderResource::make($result['order']),
             'checkoutUrl' => $result['checkoutUrl'],

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use PhpParser\Node\Expr\FuncCall;
 
-#[Fillable(['user_id', 'total_amount' , 'stripe_session_id'])]
+#[Fillable(['user_id', 'total_amount' , 'stripe_session_id' , 'status'])]
 class Order extends Model
 {
     public function casts(): array

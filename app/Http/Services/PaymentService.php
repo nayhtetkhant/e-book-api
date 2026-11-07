@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Enums\UserRole;
 use App\Models\Payment;
@@ -20,8 +21,8 @@ class PaymentService {
         $user = User::find(Auth::id());
 
         $checkout = $user->checkoutCharge($amount * 100, 'e-book-' . $payment->id, 1, [
-            'success_url' => 'http://localhost:3000/user/dashboard/download?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => 'http://localhost:3000/user/dashboard',
+            'success_url' => env('FRONTEND_URL') . '/user/dashboard/download?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => env('FRONTEND_URL') . '/user/dashboard',
             'metadata' => [
                 'payment_id' => $payment->id,
             ],
@@ -44,13 +45,13 @@ class PaymentService {
         $productIds = $payment->order->products->pluck('id')->toArray();
         $user = $payment->order->user;
 
-        DB::transaction(function () use ($payment, $user, $productIds) { 
+        DB::transaction(function () use ($payment, $user, $productIds, $sessionId) { 
             $payment->update([
-                'status' => PaymentStatus::SUCCESS
+                'status' => PaymentStatus::SUCCESS,
             ]);
 
             $payment->order->update([
-                'status' => 'paid'
+                'status' => OrderStatus::COMPLETED
             ]);
 
             if ($user) {
