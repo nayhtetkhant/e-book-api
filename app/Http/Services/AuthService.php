@@ -14,6 +14,8 @@ class AuthService {
             }
         }
 
-        throw new \Exception('Invalid Credentials');
+       throw \Illuminate\Validation\ValidationException::withMessages([
+    		'email' => ['Invalid credentials provided.'],
+	]);
     }
 }
