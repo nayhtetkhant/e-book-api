@@ -10,12 +10,16 @@ use Illuminate\Support\Facades\Storage;
 use Str;
 
 class ProductService {
-    public const IMAGE_EXTENSIONS = [
+    public const FILE_EXTENSIONS = [
         'image/jpeg' => 'jpg',
         'image/png' => 'png',
         'image/webp' => 'webp',
         'image/gif' => 'gif',
+        'application/pdf' => 'pdf',
+        'application/x-pdf' => 'pdf',
     ];
+
+    public const IMAGE_EXTENSIONS = self::FILE_EXTENSIONS;
 
     public function createProduct(array $data) {
         if (Auth::user()->role === UserRole::ADMIN) {
@@ -45,7 +49,11 @@ class ProductService {
     }
 
     public function createUploadUrl(string $contentType , Product $product) {
-        $filePath = 'products/'.\Illuminate\Support\Str::uuid().'.'.self::IMAGE_EXTENSIONS[$contentType];
+        if (!isset(self::FILE_EXTENSIONS[$contentType])) {
+            throw new \Exception("Unsupported content type: {$contentType}");
+        }
+
+        $filePath = 'products/'.\Illuminate\Support\Str::uuid().'.'.self::FILE_EXTENSIONS[$contentType];
         $expiresAt = now()->addMinutes(10);
 
         $upload = Storage::disk('s3')->temporaryUploadUrl($filePath, $expiresAt);
